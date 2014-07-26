@@ -11,9 +11,9 @@ function parseLine(line){
   }else if(int.contains(':')){
     return parseLabel(line);
   }
-  int = genInt(int);
+  int = genInt(int.toLowerCase());
   
-  line = parts.join(' ');
+  line = parts.join(' ').toLowerCase();
   line = line.replace(/;.*$/,'');  //eliminate comments
   
   var rd = parsers.rn(line);
@@ -31,14 +31,19 @@ function parseLabel(line){
 }
 
 var parsers = {};
-parsers.rn = function(line){
+parsers.rn = function(line){ //parse
   var rn, tmp = line;
+  line = line.replace(/^\s+/,''); //eliminate leading whitespace
+  
   for(var i = 0; i < line.length; i++){
     if(line[i] === ' ' || line[i] === ','){
       rn = line.slice(0,i);
       line = line.slice(i+1);
       break;
     }
+  }
+  if(!rn){
+    rn = line;
   }
   if(rn && (registers.indexOf(rn) >= 0 ||
      rn.startsWith('#'))){
@@ -51,7 +56,20 @@ parsers.op = function(line){
   return [line,op];
 };
 parsers.generic = function(line,parser){
-  
+  var tmp, out = [];
+  for(var i = 0; i < parser.length; i++){
+    tmp = parsers[parser[i]](line);
+    if(tmp.length === 2){
+      out.push(tmp[1]);
+    }else if(parser[i].startsWith('?')){
+      out.push('');
+    }else{
+      console.log(line,tmp);
+      throw "Could not fill argument "+ (i+1);
+    }
+    line = tmp[0];
+  }
+  return out;
 };
 
 /* generates an array [instruction, conditional, additional] from str
