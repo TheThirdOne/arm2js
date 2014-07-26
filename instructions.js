@@ -1,55 +1,65 @@
-mov = "$1 =  $2";
-mvn = "$1 = ~$2";
+inst.mov = "$1 =  $2";//move
+inst.mvn = "$1 = ~$2";//move not
 
 
-add = "$1 = $2 + $3"
-adc = "$1 = $2 + $3 + C"
+inst.add = "$1 = $2 + $3";
+inst.adc = "$1 = $2 + $3 + C";   //add w/ carry
 
-sub = "$1 = $2 - $3"
-sbc = "$1 = $2 - $3 - (~C)"
+inst.sub = "$1 = $2 - $3";       //subtract
+inst.sbc = "$1 = $2 - $3 - (~C)";//subtract w/ carry
 
-rsb = "$1 = $3 - $2"
-rsc = "$1 = $3 - $2 - (~C)"
+inst.rsb = "$1 = $3 - $2";       //reverse subtract
+inst.rsc = "$1 = $3 - $2 - (~C)";//reverse subtract w/ carry
 
-mul = "$1 = $2 * $3"
-mla = "$1 = $4 + $2 * $3"
+inst.mul = "$1 = $2 * $3";      //multiply
+inst.mla = "$1 = $4 + $2 * $3";
 
-and = "$1 = $2 & $3"
-eor = "$1 = $2 ^ $3"
-orr = "$1 = $2 | $3"
-bic = "$1 = $2 &~$3"
+inst.and = "$1 = $2 & $3"; //and
+inst.eor = "$1 = $2 ^ $3"; //xor
+inst.orr = "$1 = $2 | $3"; //or
+inst.bic = "$1 = $2 &~$3"; //bitwise clear
 
 
-cmp = "$0 = $2 - $3; F"
-cmn = "$0 = $2 + $3; F"
-tst = "$0 = $2 & $3; F"
-teq = "$0 = $2 ^ $3; F"
-
-barrel.lsl = "i = n << o"
-barrel.lsr = "i = n >>> o"
-barrel.asr = "i = (n >= 0)?(n >>> o):(i = n >>> o | ~(~0>>>o))"
-barrel.ror = "i = n << -o"
-barrel.rrx = "i = n << 1;C = n & 1"
-
-b  = "pc = label;break"
-bl = "lr = pc; pc = label; break"
+inst.cmp = "$0 = $2 - $3; F";
+inst.cmn = "$0 = $2 + $3; F";
+inst.tst = "$0 = $2 & $3; F";
+inst.teq = "$0 = $2 ^ $3; F";
 
 
 
-suffix.eq =  "Z"
-suffix.ne = "!Z"
-suffix.cs =  "C"
-suffix.hs =  "C"
-suffix.cc = "!C"
-suffix.lo = "!C"
-suffix.mi =  "N"
-suffix.pl = "!N"
-suffix.vs =  "V"
-suffix.vc = "!V"
-suffix.hi = "C && !Z"
-suffix.ls = "!C || Z"
-suffix.ge =  "N == Z"
-suffix.lt =  "N != Z"
-suffix.gt = "!Z && (N == V)"
-suffix.le =  "Z || (N != V)"
-suffix.al = "true"
+inst.b  = "pc = label;break";
+inst.bl = "lr = pc; pc = label; break";
+
+
+inst.ldr = "$1 = ram[$2]";
+inst.str = "ram[$2] = $1";
+
+//ldm
+//stm
+
+
+
+barrel.lsl = "i = n << o";
+barrel.lsr = "i = n >>> o";
+barrel.asr = "i = (n >= 0)?(n >>> o):(i = n >>> o | ~(~0>>>o))";
+barrel.ror = "i = n << -o";
+barrel.rrx = "i = n << 1;C = n & 1";
+
+
+suffix.eq =  "Z";
+suffix.ne = "!Z";
+suffix.cs =  "C";
+suffix.hs =  "C";
+suffix.cc = "!C";
+suffix.lo = "!C";
+suffix.mi =  "N";
+suffix.pl = "!N";
+suffix.vs =  "V";
+suffix.vc = "!V";
+suffix.hi = "C && !Z";
+suffix.ls = "!C || Z";
+suffix.ge =  "N == Z";
+suffix.lt =  "N != Z";
+suffix.gt = "!Z && (N == V)";
+suffix.le =  "Z || (N != V)";
+suffix.al = "true";
