@@ -44,6 +44,7 @@ parsers.rn = function(line){ //parse
   }
   if(!rn){
     rn = line;
+    line = '';
   }
   if(rn && (registers.indexOf(rn) >= 0 ||
      rn.startsWith('#'))){
@@ -52,16 +53,30 @@ parsers.rn = function(line){ //parse
   return [tmp];
 };
 parsers.op = function(line){
+  var op, tmp = line;
+  line = parsers.rn(line);
+  op = line[1];
+  line = line[0];
+  //Barrel shift
   
-  return [line,op];
+  return ['',op,line];
 };
 parsers.generic = function(line,parser){
-  var tmp, out = [];
+  var tmp,temp, out = [];
   for(var i = 0; i < parser.length; i++){
-    tmp = parsers[parser[i]](line);
-    if(tmp.length === 2){
-      out.push(tmp[1]);
-    }else if(parser[i].startsWith('?')){
+    temp = parser[i].startsWith('?');
+    if(temp){
+      tmp = parsers[parser[i].slice(1)](line);
+    }else{
+      tmp = parsers[parser[i]](line);
+    }
+    if(tmp[1]){
+      if(tmp.length === 2){
+        out.push(tmp[1]);
+      }else{
+        out.push(tmp.slice(1));
+      }
+    }else if(temp){
       out.push('');
     }else{
       console.log(line,tmp);
