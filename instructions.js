@@ -1,3 +1,4 @@
+inst = {};
 inst.mov = "$1 =  $2";//move
 inst.mvn = "$1 = ~$2";//move not
 
@@ -38,14 +39,14 @@ inst.str = "ram[$2] = $1";
 //stm
 
 
-
+barrel = {};
 barrel.lsl = "i = n << o";
 barrel.lsr = "i = n >>> o";
 barrel.asr = "i = (n >= 0)?(n >>> o):(i = n >>> o | ~(~0>>>o))";
 barrel.ror = "i = n << -o";
 barrel.rrx = "i = n << 1;C = n & 1";
 
-
+suffix = {};
 suffix.eq =  "Z";
 suffix.ne = "!Z";
 suffix.cs =  "C";
@@ -63,3 +64,5 @@ suffix.lt =  "N != Z";
 suffix.gt = "!Z && (N == V)";
 suffix.le =  "Z || (N != V)";
 suffix.al = "true";
+
+stdlib = {suffixes:suffix,instructions:inst};
