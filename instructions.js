@@ -1,18 +1,18 @@
 inst = {};
-inst.mov = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 =  $2"};//move
-inst.mvn = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = ~$2"};//move not
-inst.add = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = $2 + $3"};
-inst.adc = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = $2 + $3 + C"};   //add w/ carry
-inst.sub = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = $2 - $3"};       //subtract
-inst.sbc = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = $2 - $3 - (~C)"};//subtract w/ carry
-inst.rsb = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = $3 - $2"};       //reverse subtract
-inst.rsc = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = $3 - $2 - (~C)"};//reverse subtract w/ carry
-inst.mul = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = $2 * $3"};      //multiply
-inst.mla = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = $4 + $2 * $3"};
-inst.and = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = $2 & $3"}; //and
-inst.eor = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = $2 ^ $3"}; //xor
-inst.orr = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = $2 | $3"}; //or
-inst.bic = {additional:{s:'F'},parser:"<rn><rn>[op]",str:"$1 = $2 &~$3"}; //bitwise clear
+inst.mov = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 =  $2"};//move
+inst.mvn = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = ~$2"};//move not
+inst.add = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = $2 + $3"};
+inst.adc = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = $2 + $3 + C"};   //add w/ carry
+inst.sub = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = $2 - $3"};       //subtract
+inst.sbc = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = $2 - $3 - (~C)"};//subtract w/ carry
+inst.rsb = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = $3 - $2"};       //reverse subtract
+inst.rsc = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = $3 - $2 - (~C)"};//reverse subtract w/ carry
+inst.mul = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = $2 * $3"};      //multiply
+inst.mla = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = $4 + $2 * $3"};
+inst.and = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = $2 & $3"}; //and
+inst.eor = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = $2 ^ $3"}; //xor
+inst.orr = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = $2 | $3"}; //or
+inst.bic = {additional:{s:'F'},parser:['rn','rn','?op'],str:"$1 = $2 &~$3"}; //bitwise clear
 
 
 inst.cmp = {str:"$0 = $2 - $3; F"};

@@ -16,17 +16,9 @@ function parseLine(line){
   line = parts.join(' ');
   line = line.replace(/;.*$/,'');  //eliminate comments
   
-  var rd;
-  for(var i = 0; i < line.length; i++){
-    if(line[i] === ' ' || line[i] === ','){
-      rd = line.slice(0,i);
-      line = line.slice(i+1);
-      break;
-    }
-  }
-  if(registers.indexOf(rd) < 0){
-    throw "Unknown"
-  }
+  var rd = parsers.rn(line);
+  line = rd[0];
+  rd = rd[1];
   
   console.log(line,int, rd);
 }
@@ -40,7 +32,7 @@ function parseLabel(line){
 
 var parsers = {};
 parsers.rn = function(line){
-  var rn;
+  var rn, tmp = line;
   for(var i = 0; i < line.length; i++){
     if(line[i] === ' ' || line[i] === ','){
       rn = line.slice(0,i);
@@ -48,11 +40,19 @@ parsers.rn = function(line){
       break;
     }
   }
-  return [line,rn]
-}
-parsers.rn_operand2 = function(line){
-  er
-}
+  if(rn && (registers.indexOf(rn) >= 0 ||
+     rn.startsWith('#'))){
+    return [line,rn];
+  }
+  return [tmp];
+};
+parsers.op = function(line){
+  
+  return [line,op];
+};
+parsers.generic = function(line,parser){
+  
+};
 
 /* generates an array [instruction, conditional, additional] from str
  * str: imput string to first whitespace
