@@ -8,6 +8,8 @@ function parseLine(line){
   var int   = parts.shift();
   if(int.startsWith('.')){
     return parseConfig(line);
+  }else if(int.contains(':')){
+    return parseLabel(line);
   }
   int = genInt(int);
   
@@ -31,6 +33,25 @@ function parseLine(line){
 
 function parseConfig(line){
   return line;
+}
+function parseLabel(line){
+  return {label:line};
+}
+
+var parsers = {};
+parsers.rn = function(line){
+  var rn;
+  for(var i = 0; i < line.length; i++){
+    if(line[i] === ' ' || line[i] === ','){
+      rn = line.slice(0,i);
+      line = line.slice(i+1);
+      break;
+    }
+  }
+  return [line,rn]
+}
+parsers.rn_operand2 = function(line){
+  er
 }
 
 /* generates an array [instruction, conditional, additional] from str
