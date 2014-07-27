@@ -56,11 +56,15 @@ parsers.op = function(line){
   var op, tmp = line;
   line = parsers.rn(line);
   op = line[1];
+  line = parser.barrel(line[0]);
+  barrel = line[1];
   line = line[0];
-  //Barrel shift
-  
-  return ['',op,line];
+  return [line,op,barrel];
 };
+parser.barrel = function(line){
+  return [line]
+};
+
 parsers.generic = function(line,parser){
   var tmp,temp, out = [];
   for(var i = 0; i < parser.length; i++){
@@ -129,8 +133,8 @@ function genInt(str){
 }
 
 registers = ['r0','r1','r2','r3','r4','r5','r6','r7','r8','r9','r10','r11','r12','r13','r14','r15',
-             'a1','a2','a3','a4','v1','v2','v3','v4','v5','v6','sb' ,'sl' , 'fp','sp' ,'lr' , 'pc']
+             'a1','a2','a3','a4','v1','v2','v3','v4','v5','v6','sb' ,'sl' , 'fp','sp' ,'lr' , 'pc'];
 
-pattern = '<operation><cond><flags> Rd,Rn,Operand2'
+pattern = '<operation><cond><flags> Rd,Rn,Operand2';
 
-operand2 = "value" | "<shift>" +  "value" | "register"
+operand2 = "value" | "<shift>" +  "value" | "register";
