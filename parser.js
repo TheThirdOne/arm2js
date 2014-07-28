@@ -16,11 +16,10 @@ function parseLine(line){
   line = parts.join(' ').toLowerCase();
   line = line.replace(/;.*$/,'');  //eliminate comments
   
-  var rd = parsers.rn(line);
-  line = rd[0];
-  rd = rd[1];
+  var out = parsers.generic(line,stdlib.instructions[int[0]].parser);
+  out.unshift(int);
   
-  console.log(line,int, rd);
+  console.log(line,out);
 }
 
 function parseConfig(line){
@@ -53,16 +52,47 @@ parsers.rn = function(line){ //parse
   return [tmp];
 };
 parsers.op = function(line){
-  var op, tmp = line;
+  var op, barrel, tmp = line;
   line = parsers.rn(line);
   op = line[1];
-  line = parser.barrel(line[0]);
-  barrel = line[1];
+  line = parsers.barrel(line[0]);
+  barrel = [line[1],line[2]];
+  if(line[2]){
+    barrel = [line[1],line[2]];
+  }else{
+    barrel = line[1];
+  }
   line = line[0];
-  return [line,op,barrel];
+  
+  if(barrel){
+    return [line,op,barrel];
+  }else{
+    return [line,op];
+  }
+  
 };
-parser.barrel = function(line){
-  return [line]
+parsers.barrel = function(line){
+  var bs;
+  line = line.replace(/^\s+/,'');
+  for(var i = 0; i < line.length; i++){
+    if(line[i] === ' ' || line[i] === ','){
+      bs = line.slice(0,i);
+      line = line.slice(i+1);
+      break;
+    }
+  }
+  if(!bs){
+    bs = line;
+    line = '';
+  }
+  if(shifts.indexOf(bs) < 0){
+    throw "Unexpected Shift: " + bs;
+  }
+  if(bs === 'rrx'){
+    return [line,bs];
+  }
+  line = parsers.rn(line);
+  return [line[0],bs,line[1]];
 };
 
 parsers.generic = function(line,parser){
@@ -134,6 +164,9 @@ function genInt(str){
 
 registers = ['r0','r1','r2','r3','r4','r5','r6','r7','r8','r9','r10','r11','r12','r13','r14','r15',
              'a1','a2','a3','a4','v1','v2','v3','v4','v5','v6','sb' ,'sl' , 'fp','sp' ,'lr' , 'pc'];
+             
+             
+shifts = ['lsl','lsr','asr','ror','rrx'];
 
 pattern = '<operation><cond><flags> Rd,Rn,Operand2';
 
