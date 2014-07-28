@@ -1,6 +1,6 @@
 
 //parses a single line of assembly
-function parseLine(line){
+exports.parseLine = function(line){
   line = line.replace(/^\s+/,''); //eliminate leading whitespace
   
   
