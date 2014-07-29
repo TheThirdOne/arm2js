@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(grunt) {
-  var sources = 'src/**/*.js';
+  var sources = ['src/polyfill.js','src/**/*.js'];
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -21,7 +21,7 @@ module.exports = function(grunt) {
         src: 'Gruntfile.js'
       },
       lib: {
-        src: [sources]
+        src: sources
       },
       test: {
         src: ['test/**/*.js']

@@ -1,3 +1,4 @@
+var stdlib = require('./instructions.js');
 
 //parses a single line of assembly
 exports.parseLine = function(line){
@@ -17,10 +18,10 @@ exports.parseLine = function(line){
   line = line.replace(/;.*$/,'');  //eliminate comments
   
   var out = parsers.generic(line,stdlib.instructions[int[0]].parser);
-  out.unshift(int);
+  out = {instruction:int[0]||int,conditional:int[1],options:int[2],args:out};
   
   console.log(line,out);
-}
+};
 
 function parseConfig(line){
   return line;
@@ -45,7 +46,7 @@ parsers.rn = function(line){ //parse
     rn = line;
     line = '';
   }
-  if(rn && (registers.indexOf(rn) >= 0 ||
+  if(rn && (stdlib.registers.indexOf(rn) >= 0 ||
      rn.startsWith('#'))){
     return [line,rn];
   }
@@ -85,7 +86,7 @@ parsers.barrel = function(line){
     bs = line;
     line = '';
   }
-  if(shifts.indexOf(bs) < 0){
+  if(stdlib.shifts.indexOf(bs) < 0){
     throw "Unexpected Shift: " + bs;
   }
   if(bs === 'rrx'){
@@ -161,13 +162,3 @@ function genInt(str){
   }
   throw "Unsupporting Instruction: " + str;
 }
-
-registers = ['r0','r1','r2','r3','r4','r5','r6','r7','r8','r9','r10','r11','r12','r13','r14','r15',
-             'a1','a2','a3','a4','v1','v2','v3','v4','v5','v6','sb' ,'sl' , 'fp','sp' ,'lr' , 'pc'];
-             
-             
-shifts = ['lsl','lsr','asr','ror','rrx'];
-
-pattern = '<operation><cond><flags> Rd,Rn,Operand2';
-
-operand2 = "value" | "<shift>" +  "value" | "register";
