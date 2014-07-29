@@ -1,1 +1,2 @@
 String.prototype.startsWith = String.prototype.startsWith || function(str){return this.substr(0,str.length) === str};
+String.prototype.contains   = String.prototype.contains   || function(str){return this.indexOf(str) >= 0};

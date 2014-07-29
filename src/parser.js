@@ -2,6 +2,7 @@ var stdlib = require('./instructions.js');
 
 //parses a single line of assembly
 exports.parseLine = function(line){
+  tmp = line;
   line = line.replace(/^\s+/,''); //eliminate leading whitespace
   
   
@@ -18,9 +19,10 @@ exports.parseLine = function(line){
   line = line.replace(/;.*$/,'');  //eliminate comments
   
   var out = parsers.generic(line,stdlib.instructions[int[0]].parser);
-  out = {instruction:int[0]||int,conditional:int[1],options:int[2],args:out};
+  out = {instruction:int[0]||int,conditional:int[1],option:int[2],args:out,str:tmp};
   
   console.log(line,out);
+  return out;
 };
 
 function parseConfig(line){
@@ -57,20 +59,16 @@ parsers.op = function(line){
   line = parsers.rn(line);
   op = line[1];
   line = parsers.barrel(line[0]);
-  barrel = [line[1],line[2]];
-  if(line[2]){
-    barrel = [line[1],line[2]];
-  }else{
-    barrel = line[1];
-  }
-  line = line[0];
   
-  if(barrel){
-    return [line,op,barrel];
-  }else{
-    return [line,op];
+  if(line.length === 3 && line[2]){
+    return [line[0],op,line[1],line[2]];
   }
-  
+  if(line.length >= 2 && line[1]){
+    return [line[0],op,line[1]];
+  }
+  if(line.length >= 1){
+    return [line[0],op];
+  }
 };
 parsers.barrel = function(line){
   var bs;
@@ -85,6 +83,9 @@ parsers.barrel = function(line){
   if(!bs){
     bs = line;
     line = '';
+  }
+  if(!bs){
+    return ['',''];
   }
   if(stdlib.shifts.indexOf(bs) < 0){
     throw "Unexpected Shift: " + bs;
@@ -122,11 +123,11 @@ parsers.generic = function(line,parser){
   return out;
 };
 
-/* generates an array [instruction, conditional, additional] from str
+/* generates an array [instruction, conditional, option] from str
  * str: imput string to first whitespace
  * instruction: add, sub, etc
  * conditional: eq, al, etc
- * additional: s, ia, x, b, etc                                        */
+ * option: s, ia, x, b, etc                                        */
 function genInt(str){
   for(var int in stdlib.instructions){
     if(str.startsWith(int)){
@@ -138,8 +139,8 @@ function genInt(str){
           if(int.length + suffix.length === str.length){
             return [int,suffix];
           }
-          if(stdlib.instructions[int].additional){
-            for(var add in stdlib.instructions[int].additional){
+          if(stdlib.instructions[int].option){
+            for(var add in stdlib.instructions[int].option){
               if(str.startsWith(int + suffix + add)){
                 if(int.length + suffix.length + add.length === str.length){
                   return [int,suffix,add];
@@ -149,8 +150,8 @@ function genInt(str){
           }
         }
       }
-      if(stdlib.instructions[int].additional){
-        for(var add in stdlib.instructions[int].additional){
+      if(stdlib.instructions[int].option){
+        for(var add in stdlib.instructions[int].option){
           if(str.startsWith(int + add)){
             if(int.length + add.length === str.length){
               return [int,'',add];
