@@ -10,10 +10,16 @@ exports.compile = function(lines){
   i16= new Int16Array(heap),\n\
   i32= new Int32Array(heap),\n\
   registers = new ArrayBuffer(16),\n\
-  ureg = new Uint32Buffer(registers),\n\
-  reg = new Int32Buffer(registers),\n\
+  ureg = new Uint32Array(registers),\n\
+  reg = new Int32Array(registers),\n\
   N = 0, C = 0, Z = 0, V = 0;\n\
-  switch(registers[15]){\n';
+  out: \n\
+  while(true){\n\
+  switch(ureg[15]){\n';
+  for(var i = 0; i < lines.length;i++){
+    out+='case '+i+':'+exports.codegen(lines[i],i,context)+';\n';
+  }
+  out += 'default:break out;}}';
   return out;
 };
 exports.codegen = function(line,number,context){
@@ -26,7 +32,7 @@ exports.codegen = function(line,number,context){
     throw 'Insufficient args for instruction: ' + line.str;
   }
   if(pc){
-    out += 'pc = ' + number + ';';
+    out += 'pc = ' + number + '+1;';
   }
   if(line.conditional){
     out += 'if('+stdlib.suffixes[line.conditional]+'){';
@@ -45,19 +51,19 @@ exports.codegen = function(line,number,context){
 };
 
 exports.generate = function(template,args,context){
-  var input = [];
+  var out;
   for(var i = 0;i < args.length;i++){
     if(args[i] instanceof Array){
       args[i] = args[i][0]; //temp until I implement barrel codegen
     }
     if(args[i].startsWith('#')){
-      input[i] = args[i].slice(1);
+      out = args[i].slice(1);
     }
     if(stdlib.registers.indexOf(args[i]) >= 0){
-      input[i] = "ureg["+(stdlib.registers.indexOf(args[i])%16)+']';
+      out = "ureg["+(stdlib.registers.indexOf(args[i])%16)+']';
     }
-    template = template.replace('$'+i,input[i]);
+    template = template.replace('$'+i,out);
   }
-  template = template.replace('$'+(args.length+1),'0');
+  //template = template.replace('$'+(args.length+1),'0');
   return template;
 };

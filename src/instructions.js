@@ -1,25 +1,24 @@
 instructions = {};
-instructions.mov = {option:{s:'S;F'},parser:['rn','?op'],         template:"$0 =  $1"};//move
-instructions.mvn = {option:{s:'S;F'},parser:['rn','?op'],         template:"$0 = ~$1"};//move not
-instructions.add = {option:{s:'S;F'},parser:['rn','rn','?op'],    template:"$0 = $1 + $2"};
-instructions.adc = {option:{s:'S;F'},parser:['rn','rn','?op'],    template:"$0 = $1 + $2 + C"};   //add w/ carry
-instructions.sub = {option:{s:'S;F'},parser:['rn','rn','?op'],    template:"$0 = $1 - $2"};       //subtract
-instructions.sbc = {option:{s:'S;F'},parser:['rn','rn','?op'],    template:"$0 = $1 - $2 - (~C)"};//subtract w/ carry
-instructions.rsb = {option:{s:'S;F'},parser:['rn','rn','?op'],    template:"$0 = $2 - $1"};       //reverse subtract
-instructions.rsc = {option:{s:'S;F'},parser:['rn','rn','?op'],    template:"$0 = $2 - $1 - (~C)"};//reverse subtract w/ carry
-instructions.mul = {option:{s:'S;F'},parser:['rn','rn','rn'],     template:"$0 = $1 *  $2"};      //multiply
-instructions.mla = {option:{s:'S;F'},parser:['rn','rn','rn','rn'],template:"$0 = $3 +  $1 * $2"};
-instructions.and = {option:{s:'S;F'},parser:['rn','rn','?op'],    template:"$0 = $1 & $2"}; //and
-instructions.eor = {option:{s:'S;F'},parser:['rn','rn','?op'],    template:"$0 = $1 ^ $2"}; //xor
-instructions.orr = {option:{s:'S;F'},parser:['rn','rn','?op'],    template:"$0 = $1 | $2"}; //or
-instructions.bic = {option:{s:'S;F'},parser:['rn','rn','?op'],    template:"$0 = $1 &~$2"}; //bitwise clear
+instructions.mov = {option:{s:'S;F'},parser:['rn','op'],          template:"$0 =  $1"};//move
+instructions.mvn = {option:{s:'S;F'},parser:['rn','op'],          template:"$0 = ~$1"};//move not
+instructions.add = {option:{s:'S;F'},parser:['rn','rn','op'],     template:"$0 = $1 + $2"};
+instructions.adc = {option:{s:'S;F'},parser:['rn','rn','op'],     template:"$0 = $1 + $2 + C"};   //add w/ carry
+instructions.sub = {option:{s:'S;F'},parser:['rn','rn','op'],     template:"$0 = $1 - $2"};       //subtract
+instructions.sbc = {option:{s:'S;F'},parser:['rn','rn','op'],     template:"$0 = $1 - $2 - (~C)"};//subtract w/ carry
+instructions.rsb = {option:{s:'S;F'},parser:['rn','rn','op'],     template:"$0 = $2 - $1"};       //reverse subtract
+instructions.rsc = {option:{s:'S;F'},parser:['rn','rn','op'],     template:"$0 = $2 - $1 - (~C)"};//reverse subtract w/ carry
+instructions.mul = {option:{s:'S;F'},parser:['rn','rn','rn'],     template:"$0 = $1 * $2"};      //multiply
+instructions.mla = {option:{s:'S;F'},parser:['rn','rn','rn','rn'],template:"$0 = $3 + $1 * $2"};
+instructions.and = {option:{s:'S;F'},parser:['rn','rn','op'],     template:"$0 = $1 & $2"}; //and
+instructions.eor = {option:{s:'S;F'},parser:['rn','rn','op'],     template:"$0 = $1 ^ $2"}; //xor
+instructions.orr = {option:{s:'S;F'},parser:['rn','rn','op'],     template:"$0 = $1 | $2"}; //or
+instructions.bic = {option:{s:'S;F'},parser:['rn','rn','op'],     template:"$0 = $1 &~$2"}; //bitwise clear
 
 
 instructions.cmp = {parser:['rn','?op'],template:"$0 = $1 - $2; F"};
 instructions.cmn = {parser:['rn','?op'],template:"$0 = $1 + $2; F"};
 instructions.tst = {parser:['rn','?op'],template:"$0 = $1 & $2; F"};
 instructions.teq = {parser:['rn','?op'],template:"$0 = $1 ^ $2; F"};
-
 
 
 instructions.b  = "pc = label;break";
